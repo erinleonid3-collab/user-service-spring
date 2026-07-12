@@ -1,9 +1,6 @@
 package com.example.userservice.service;
 
-import com.example.userservice.dto.CreateUserRequestDto;
-import com.example.userservice.dto.UpdateUserRequestDto;
-import com.example.userservice.dto.UserEventDto;
-import com.example.userservice.dto.UserResponseDto;
+import com.example.userservice.dto.*;
 import com.example.userservice.entity.User;
 import com.example.userservice.exception.UserAlreadyExistsException;
 import com.example.userservice.exception.UserNotFoundException;
@@ -97,5 +94,16 @@ public class UserServiceImpl implements UserService {
                 .timestamp(LocalDateTime.now().toString())
                 .build();
         userEventProducer.sendUserEvent(event);
+    }
+    @Override
+    public UserDtoWithLinks toDtoWithLinks(UserResponseDto dto) {
+        User user = User.builder()
+                .id(dto.getId())
+                .name(dto.getName())
+                .email(dto.getEmail())
+                .age(dto.getAge())
+                .createdAt(dto.getCreatedAt())
+                .build();
+        return userMapper.toDtoWithLinks(user);
     }
 }
